@@ -1,0 +1,32 @@
+{
+  "name": "APD",
+  "version": "1.0",
+  "description": "extensión de chrome",
+  "manifest_version": 3,
+  "icons": {
+    
+    "128": "icon128.png"
+  },
+  "permissions": [
+    "tabs",
+    "activeTab",
+    "storage"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [{
+    "matches": ["https://misservicios.abc.gob.ar/actos.publicos.digitales/"],
+    "js": ["script.js"],
+    "css": ["style.css"]
+  }],
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "web_accessible_resources": [
+    {
+      "matches": ["https://misservicios.abc.gob.ar/*"],
+      "resources": ["consultar.js"]
+    }
+  ]
+}
