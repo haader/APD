@@ -154,6 +154,17 @@ const mihtml = `
             .close{
                 height:100%;
             }
+            #accion {
+                display: flex;
+                flex-direction: row; /* dirección de flexbox por defecto */
+              }
+              
+              @media (max-width: 700px) {
+                #accion {
+                  flex-direction: column; /* cambia la dirección de flexbox a columna cuando el ancho de la ventana es menor a 700px */
+                }
+              }
+              
             
 </style>
 
