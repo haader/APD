@@ -150,6 +150,10 @@ const mihtml = `
                 color: #474545;
                 background-color: #dad5de;
             }
+
+            .close{
+                height:100%;
+            }
             
 </style>
 
@@ -224,13 +228,14 @@ function repintarTabla() {
         
         <td id="accionSelect">
                             <button class="buttonExtension" id="guardarSelect">Guardar</button>
-                            <button type="button" class="close" aria-label="Close"></button>
+                            <button type="button" class="close" id="LimpiarSeleccion" aria-label="Close"></button>
         </td>
 
     </tr>`;
 
 
             ListenerGuardarSelectJSON();
+            ListenerLimpiarSeleccion();
 
             //si hay datos en LOCALSTORAGE cargamos los datos mas la row de carga
         } else {
@@ -314,13 +319,14 @@ function repintarTabla() {
     
     <td id="accionSelect">
                         <button class="buttonExtension" id="guardarSelect">Guardar</button>
-                        <button type="button" class="close">
+                        <button type="button" class="close" id="LimpiarSeleccion">
                                     <span aria-hidden="true">×</span>
                         </button>
     </td>
 
     </tr>`;
             ListenerGuardarSelectJSON();
+            ListenerLimpiarSeleccion();
 
 
         }
@@ -396,6 +402,20 @@ function ListenerGuardarSelectJSON() {
 
     }, 2000)
 
+}
+
+function ListenerLimpiarSeleccion(){
+    document.getElementById("LimpiarSeleccion").addEventListener('click',()=>{
+        
+        distrito = '';
+        nivel = '';
+        cargo = '';
+        
+        document.getElementById("distritoSelect").innerText="1.Selecciona un distrito";
+        document.getElementById("nivelSelect").innerText="2.Selecciona un nivel";
+        document.getElementById("cargoSelect").innerText="3.Selecciona un cargo";
+
+    })
 }
 
 
