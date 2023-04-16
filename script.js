@@ -116,6 +116,7 @@ const mihtml = `
                 font-size: 1rem;
                 line-height: 1.5;
                 border-radius: 0.25rem;
+                margin: 5px;
 
             }
             .buttonExtension:not(:disabled):not(.disabled) {
@@ -141,7 +142,7 @@ const mihtml = `
                 border-radius: 0.25rem;
                 transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
             
-                margin: 0;
+                margin: 5px;
                 font-family: inherit;
             
                 overflow: visible;
@@ -239,7 +240,10 @@ function repintarTabla() {
         
         <td id="accionSelect">
                             <button class="buttonExtension" id="guardarSelect">Guardar</button>
-                            <button type="button" class="close" id="LimpiarSeleccion" aria-label="Close"></button>
+        </td>
+
+        <td id="accionSelect">
+                            <button type="button" class="close" id="LimpiarSeleccion" aria-label="Close">X</button>
         </td>
 
     </tr>`;
@@ -328,12 +332,15 @@ function repintarTabla() {
     <td id="nivelSelect">2.Selecciona un nivel</td>
     <td id="cargoSelect">3.Selecciona un cargo</td>
     
+  
     <td id="accionSelect">
-                        <button class="buttonExtension" id="guardarSelect">Guardar</button>
-                        <button type="button" class="close" id="LimpiarSeleccion">
-                                    <span aria-hidden="true">×</span>
-                        </button>
+        <button class="buttonExtension" id="guardarSelect">Guardar</button>
     </td>
+
+    <td id="accionSelect">
+        <button type="button" class="close" id="LimpiarSeleccion" aria-label="Close">X</button>
+    </td>
+
 
     </tr>`;
             ListenerGuardarSelectJSON();
