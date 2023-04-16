@@ -11,3 +11,5 @@ permitiendo que el usuario pueda acceder a los datos almacenados en distintos di
 según los filtros que el usuario guardo, mostrando la cantidad de publicaciones disponibles 
 3.apretando el boton "Compartir"  el usuario puede recomendar la extencion enviando así un link a
 sus amigos en whatsapp
+
+extension creada por adrian benitez docente de ciencias quimicas
