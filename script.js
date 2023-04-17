@@ -10,7 +10,7 @@
 //1. crear en div en la página
 
 // Obtener el elemento body de la página
-const rowBarraBlanca = document.querySelector('.row.barraBlanca');
+const rowBarraBlanca = document.querySelector('.row.barraOscura');
 
 // Crear un nuevo elemento div para el banner
 const banner = document.createElement('div');
@@ -37,13 +37,17 @@ const mihtml = `
 
 <style>     
 
+            .tabla{
+                border:solid 1px solid;
+                margin-top:1rem;
+            }
             .seccionDistrito{
                 font-size:40px;
                 color:white;
                 width:100%;
                 font-weight: 300;
                 text-align:center;
-                background:#474545;
+                background:#b060a8;
             }
             .center{
                 width:100%;
@@ -62,8 +66,10 @@ const mihtml = `
             table{
                 width:100%;
             }
+            
             tr{
-                border-bottom:solid #b040a8 1px;
+                border: solid #b060a8 1px;
+                border-top: none;
                 width:33,3%;
             }
             th{
@@ -71,17 +77,27 @@ const mihtml = `
                 text-align:center;
             }
             td{
-                color:black;
+                
                 text-align:center;
                 color: black;
                 font-size: 20px;
                 justify-content: center;
                 width:33,3%;
+                font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
             }
             #distritoSelect,#nivelSelect,#cargoSelect,#estadoSelect,#accionSelect{
                 background:pink;
+                
+            }
+            .textnewRowgris{
                 text-align:center;
-                color:black;
+                color:#707070; 
+                margin:0;  
+            }
+            .textnewRowblack{
+                text-align:center;
+                color:black;  
+                margin:0;
             }
             .tittle {
             
@@ -104,14 +120,14 @@ const mihtml = `
             }
 
             .buttonExtensionoff{
-                color: red;
+                color: #fd8585;
                 background-color: "#f474545";
                 display: inline-block;
                 font-weight: 400;
                 
                 text-align: center;
                 vertical-align: middle;
-                border: 1px solid red;
+                border: 1px solid #fd8585;
                 padding: 0.375rem 0.75rem;
                 font-size: 1rem;
                 line-height: 1.5;
@@ -165,6 +181,10 @@ const mihtml = `
                   flex-direction: column; /* cambia la dirección de flexbox a columna cuando el ancho de la ventana es menor a 700px */
                 }
               }
+              #newRow{
+                margin-top:1rem;
+                border: solid #b060a8 1px;
+              }
               
             
 </style>
@@ -187,8 +207,7 @@ banner.style.color = 'white';
 banner.style.padding = '10px';
 
 // Agrega el banner como un elemento hermano de .row.barraBlanca
-rowBarraBlanca.parentNode.insertBefore(banner, rowBarraBlanca);
-
+rowBarraBlanca.parentNode.insertBefore(banner, rowBarraBlanca.nextSibling);
 //DECLARACION DE VARIABLES
 
 var distrito = '';
@@ -231,18 +250,18 @@ function repintarTabla() {
         //si los datos del LOCALSTORAGE estan vacios solo cargamos 1 row
         if (arrayJSONtraido === undefined) {
 
-            {/* <td id="distritoSelect" color="red">selecciona un distrito</td> */ }
+            {/* <td id="distritoSelect" color="#fd8585">selecciona un distrito</td> */ }
             document.getElementById("newRow").innerHTML = `
-    tr>
-        <td id="distritoSelect">1.Selecciona un distrito</td>
-        <td id="nivelSelect">2.Selecciona un nivel</td>
-        <td id="cargoSelect">3.Selecciona un cargo</td>
+    <tr>
+    <td id="distritoSelect"><p class="textnewRowgris">1.Selecciona un distrito</p></td>
+    <td id="nivelSelect"><p class="textnewRowgris">2.Selecciona un nivel</p></td>
+    <td id="cargoSelect"><p class="textnewRowgris">3.Selecciona un cargo</p></td>
         
         <td id="accionSelect">
                             <button class="buttonExtension" id="guardarSelect">Guardar</button>
         </td>
 
-        <td id="accionSelect">
+        <td id="accionSelect" style="padding:1rem">
                             <button type="button" class="close" id="LimpiarSeleccion" aria-label="Close">X</button>
         </td>
 
@@ -285,25 +304,26 @@ function repintarTabla() {
                     console.log("pintar en= " + pintaren);
                     //insertamos el div que contene el nombre del distrito y lostitulos de las columnas
                     document.getElementById("tablas").innerHTML += `
+                    <div class="tabla">
+                            <div class="seccionDistrito">
+                                ${convertMayuscula(distritoActual)}
+                            </div>
 
-                    <div class="seccionDistrito">
-                        ${convertMayuscula(distritoActual)}
+                            <table>
+                                    <thead>
+                                            <tr>
+                                                ${vernivelboolean ? `<th><div class="column"><i class="iconoFiltro fas fa-layer-group"></i> Nivel</div></th>` : ''}
+                                                <th><div class="column"><i class="iconoFiltro fas fa-graduation-cap"></i> Cargo</div></th>
+                                                <th><div class="column"><i class="iconoFiltro fas fa-eye"></i> Publicada</div></th>
+                                                <th><div class="column"><i class="iconoFiltro fas fa-briefcase"></i>Acción</div></th>
+                                            </tr>
+                                    </thead>
+
+                                    <tbody id=${pintaren}>
+
+                                    </tbody>
+                            </table>
                     </div>
-
-                    <table>
-                            <thead>
-                                    <tr>
-                                        ${vernivelboolean ? `<th><div class="column"><i class="iconoFiltro fas fa-layer-group"></i> Nivel</div></th>` : ''}
-                                        <th><div class="column"><i class="iconoFiltro fas fa-graduation-cap"></i> Cargo</div></th>
-                                        <th><div class="column"><i class="iconoFiltro fas fa-eye"></i> Publicada</div></th>
-                                        <th><div class="column"><i class="iconoFiltro fas fa-briefcase"></i>Acción</div></th>
-                                    </tr>
-                            </thead>
-
-                            <tbody id=${pintaren}>
-
-                            </tbody>
-                    </table>
         `;
                     // document.getElementById("seccionDistrito").innerText=distritoActual;    
                 }
@@ -327,17 +347,17 @@ function repintarTabla() {
 
 
             document.getElementById("newRow").innerHTML = `
-    tr>
-    <td id="distritoSelect">1.Selecciona un distrito</td>
-    <td id="nivelSelect">2.Selecciona un nivel</td>
-    <td id="cargoSelect">3.Selecciona un cargo</td>
+    <tr>
+    <td id="distritoSelect"><p class="textnewRowgris">1.Selecciona un distrito</p></td>
+    <td id="nivelSelect"><p class="textnewRowgris">2.Selecciona un nivel</p></td>
+    <td id="cargoSelect"><p class="textnewRowgris">3.Selecciona un cargo</p></td>
     
   
     <td id="accionSelect">
         <button class="buttonExtension" id="guardarSelect">Guardar</button>
     </td>
 
-    <td id="accionSelect">
+    <td id="accionSelect" style="padding:1rem">
         <button type="button" class="close" id="LimpiarSeleccion" aria-label="Close">X</button>
     </td>
 
@@ -429,9 +449,9 @@ function ListenerLimpiarSeleccion(){
         nivel = '';
         cargo = '';
         
-        document.getElementById("distritoSelect").innerText="1.Selecciona un distrito";
-        document.getElementById("nivelSelect").innerText="2.Selecciona un nivel";
-        document.getElementById("cargoSelect").innerText="3.Selecciona un cargo";
+        document.getElementById("distritoSelect").innerHTML='<p class="textnewRowgris">1.Selecciona un distrito</p>';
+        document.getElementById("nivelSelect").innerHTML='<p class="textnewRowgris">2.Selecciona un nivel</p>';
+        document.getElementById("cargoSelect").innerHTML='<p class="textnewRowgris">3.Selecciona un cargo</p>';
 
     })
 }
@@ -453,7 +473,7 @@ const observerDistrito = new MutationObserver(function (mutations) {
         //guardamos el distrito elegido el el arrayJSONSelect
         arrayJSONSelect.distrito = distrito;
         //colocamos el distrito elegido en la tabla
-        document.getElementById("distritoSelect").innerText = arrayJSONSelect.distrito;
+        document.getElementById("distritoSelect").innerHTML = `<p class="textnewRowblack">${arrayJSONSelect.distrito}</p>`;
 
     } catch (error) {
 
@@ -483,7 +503,7 @@ const observerNivel = new MutationObserver(function (mutations) {
         //guardamos el nivel elegido el el arrayJSONSelect
         arrayJSONSelect.nivel = nivel;
         //colocamos el distrito elegido en la tabla
-        document.getElementById("nivelSelect").innerText = arrayJSONSelect.nivel;
+        document.getElementById("nivelSelect").innerHTML = `<p class="textnewRowblack">${arrayJSONSelect.nivel}</p>`;
 
     } catch (error) {
 
@@ -511,7 +531,8 @@ const observerCargo = new MutationObserver(function (mutations) {
         //guardamos el nivel elegido el el arrayJSONSelect
         arrayJSONSelect.cargo = cargo;
         //colocamos el distrito elegido en la tabla
-        document.getElementById("cargoSelect").innerText = arrayJSONSelect.cargo;
+        
+        document.getElementById("cargoSelect").innerHTML = `<p class="textnewRowblack">${arrayJSONSelect.cargo}</p>`;
     } catch (error) {
 
     }
@@ -557,7 +578,7 @@ async function mostrarResultado(id, pintaren, color, dis, niv, car) {
     //determinamos el color de la fuente segun el valor de resultado
     if (resultado == 0) {
         //pintamos la fuente de rojo
-        colorFuente = "red";
+        colorFuente = "#fd8585";
 
 
     } else {
@@ -583,7 +604,7 @@ async function mostrarResultado(id, pintaren, color, dis, niv, car) {
             <td id="accion">
             
 
-            ${colorFuente=="red"?`<button class="buttonExtensionoff" id="noneoff">Ver</button>`:`<button class="buttonExtension" id="ver${id}">Ver</button>`}
+            ${colorFuente=="#fd8585"?`<button class="buttonExtensionoff" id="noneoff">Ver</button>`:`<button class="buttonExtension" id="ver${id}">Ver</button>`}
             
                             <button class="buttonExtension" id="copiar${id}">Copiar</button>
                             <button class="buttonExtension" id="eliminar${id}">Eliminar</button>
@@ -675,7 +696,7 @@ async function mostrarResultado(id, pintaren, color, dis, niv, car) {
                         //guardamos el nuevo array en el local storage de google
 
                         chrome.storage.sync.set({ "rowsAPD": arrayJSONtraido }, function () {
-                            alert("se elimino correctamente la fila " + (id + 1))
+                            // alert("se elimino correctamente la fila " + (id + 1))
                             //pintamos la tabla trayendo los datos del local estorage de google
                             repintarTabla();
                         })
