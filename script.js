@@ -47,7 +47,7 @@ const mihtml = `
                 width:100%;
                 font-weight: 300;
                 text-align:center;
-                background:#b060a8;
+                background:#474545;
             }
             .center{
                 width:100%;
@@ -87,6 +87,7 @@ const mihtml = `
             }
             #distritoSelect,#nivelSelect,#cargoSelect,#estadoSelect,#accionSelect{
                 background:pink;
+                padding: 10px;
                 
             }
             .textnewRowgris{
@@ -179,11 +180,35 @@ const mihtml = `
               @media (max-width: 700px) {
                 #accion {
                   flex-direction: column; /* cambia la dirección de flexbox a columna cuando el ancho de la ventana es menor a 700px */
+
                 }
               }
               #newRow{
                 margin-top:1rem;
                 border: solid #b060a8 1px;
+              }
+              .divadapter{
+                display: flex;
+                flex-direction: row;
+                justify-content: space-around;
+                background: pink;
+              }
+              @media screen and (max-width: 500px) { 
+                .divadapter {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-around;
+                    background: pink;
+                    align-content: space-around;
+                  width:100%;
+                  
+                }
+              }
+              .mirow{
+                display:flex;
+                flex-direction:row;
+                justify-content: center;
+                background:pink;
               }
               
             
@@ -220,7 +245,7 @@ var arrayJSONenviar = [{}];
 const consultaURL = 'https://servicios3.abc.gob.ar/valoracion.docente/api/apd.oferta.encabezado/';
 
 const color2 = 'white';
-const color1 = '#7cc';
+const color1 = '#d3d3d3';
 let colorSelect = color1;
 
 
@@ -232,6 +257,30 @@ let pintaren = 'distrito';
 let numTablas = 0;
 let vernivelboolean = false;
 let vertodoboolean = false;
+//variable que contiene agregar filtro
+let agregarFiltro=`
+    <div class="seccionDistrito">Agregar Filtro</div>
+
+    <div class="divadapter">
+              
+        <div id="distritoSelect"><p class="textnewRowgris">1.Selecciona un distrito</p></div>
+        <div id="nivelSelect"><p class="textnewRowgris">2.Selecciona un nivel</p></div>
+        <div id="cargoSelect"><p class="textnewRowgris">3.Selecciona un cargo</p></div>
+        
+    
+        <div class="mirow">
+            <div id="accionSelect">
+                <button class="buttonExtension" id="guardarSelect">Guardar</button>
+            </div>
+
+            <div id="accionSelect" style="padding:1rem">
+                <button type="button" class="close" id="LimpiarSeleccion" aria-label="Close">X</button>
+            </div>
+        </div>
+    </div>`;
+
+
+
 repintarTabla();
 
 //-trae los datos en json de la cuenta de google y 
@@ -251,21 +300,8 @@ function repintarTabla() {
         if (arrayJSONtraido === undefined) {
 
             {/* <td id="distritoSelect" color="#fd8585">selecciona un distrito</td> */ }
-            document.getElementById("newRow").innerHTML = `
-    <tr>
-    <td id="distritoSelect"><p class="textnewRowgris">1.Selecciona un distrito</p></td>
-    <td id="nivelSelect"><p class="textnewRowgris">2.Selecciona un nivel</p></td>
-    <td id="cargoSelect"><p class="textnewRowgris">3.Selecciona un cargo</p></td>
-        
-        <td id="accionSelect">
-                            <button class="buttonExtension" id="guardarSelect">Guardar</button>
-        </td>
-
-        <td id="accionSelect" style="padding:1rem">
-                            <button type="button" class="close" id="LimpiarSeleccion" aria-label="Close">X</button>
-        </td>
-
-    </tr>`;
+            //agregamos para agregar un nuevo filtro
+            document.getElementById("newRow").innerHTML = agregarFiltro;
 
 
             ListenerGuardarSelectJSON();
@@ -291,13 +327,113 @@ function repintarTabla() {
             // distritoActual=arrayJSONtraido[0].distrito;
             //nombramos la tabla
 
+            function copiarDistrito(copyDistrito=''){
+
+
+                if((arrayJSONSelect.distrito=='')||(arrayJSONSelect.distrito==undefined)){
+
+                    alert("debe seleccionar un distrito para crear la copia")
+
+                }else{
+
+                                function tieneDistrito(array, distrito='') {
+                                   
+                                for (let i = 0; i < array.length; i++) {
+                                    // console.log("-examinamos: "+distrito+" comparamos con "+i+"."+array[i].distrito);
+                                    if (array[i].distrito == distrito) {
+                                    return true;
+                                    }
+                                }
+                                return false;
+                                }
+
+                               
+                        //comprobamos si el distrito se encuentra en una tabla
+                        if(tieneDistrito(arrayJSONtraido,arrayJSONSelect.distrito)){
+
+                            let stringDistrito=arrayJSONSelect.distrito;
+                            let selectDistritoMayus=stringDistrito.toUpperCase();
+                            alert("ya existe una tabla con el distrito "+selectDistritoMayus)
+
+                        }else{
+
+                            let stringDistrito=arrayJSONSelect.distrito;
+                            let distSelMayus=stringDistrito.toUpperCase();
+
+                            let copyDistritoMayus=copyDistrito.toUpperCase();
+
+                            if(confirm("se creara una nueva tabla del distrito "+distSelMayus+" con los filtros del distrito de "+copyDistritoMayus)){
+                                
+                               
+                                try {
+                               
+                                     //creamos la tabla
+                                    let asignar=arrayJSONSelect.distrito;
+                                    let newTable=arrayJSONtraido.filter(objeto=>objeto.distrito===copyDistrito);
+                                    let newTableFinal=newTable.map(objeto=>({...objeto, distrito:asignar}))
+                                    
+                                    console.log("array original");
+                                    console.log(arrayJSONtraido);
+                                    
+                                        let newarrayJSONTraido=arrayJSONtraido.concat(newTableFinal);
+                                        arrayJSONtraido=newarrayJSONTraido;
+                                        
+                                    console.log("la nueva tabla con distrito: "+arrayJSONSelect.distrito);
+                                    console.log(arrayJSONtraido)
+
+                               
+                                    //guardamos el nuevo array en el local storage de google
+            
+                                    chrome.storage.sync.set({ "rowsAPD": arrayJSONtraido }, function () {
+                                        repintarTabla();
+                                    })
+            
+                                } catch (error) {
+                                    alert("ocurrio un error al crear el nuevo filtro")
+                                }
+
+                            }else{
+                                //no creamos la tabla
+                            }
+                        }
+                }
+
+                
+            }
+
+            function eliminarDistrito(deleteDistrito=''){
+                if(confirm("Atención: realmente deseas eliminar la tabla de "+deleteDistrito.toUpperCase())){
+                try{
+                
+                    let newArrayJSONtraidos=arrayJSONtraido.filter(objeto=>objeto.distrito != deleteDistrito);
+                    arrayJSONtraido=newArrayJSONtraidos;
+
+                     //guardamos el nuevo array en el local storage de google
+            
+                     chrome.storage.sync.set({ "rowsAPD": arrayJSONtraido }, function () {
+                        repintarTabla();
+                    })
+
+                } catch (error) {
+                    alert("ocurrio un error al crear el nuevo filtro")
+                }
+
+
+                    
+                }else{
+
+                }
+                
+
+            }
+
 
 
             //realizamos la iteración del arrayJSONtraido para pintar en el DOM
             arrayJSONtraido.forEach((element, index) => {
 
                 //actualizamos el valor del distrito actual    
-                if (element.distrito != distritoActual) {
+                if (element.distrito !== distritoActual) {
                     numTablas++;
                     distritoActual = element.distrito;
                     pintaren = 'tabla' + numTablas;
@@ -307,6 +443,8 @@ function repintarTabla() {
                     <div class="tabla">
                             <div class="seccionDistrito">
                                 ${convertMayuscula(distritoActual)}
+                                <button type="button" class="buttonExtension" id="ct${distritoActual}" >Copiar Filtros</button>
+                                <button type="button" class="buttonExtension" id="et${distritoActual}">Eliminar Filtros</button>
                             </div>
 
                             <table>
@@ -326,6 +464,18 @@ function repintarTabla() {
                     </div>
         `;
                     // document.getElementById("seccionDistrito").innerText=distritoActual;    
+                    document.getElementById("ct"+element.distrito).addEventListener('click',()=>{
+                      
+                        copiarDistrito(element.distrito);  
+
+                    })
+
+                    //clocamos el listener para el boton eliminar tabla
+                    document.getElementById("et"+element.distrito).addEventListener('click',()=>{
+                        eliminarDistrito(element.distrito);
+                    })
+
+                    //primeraFuncion(segundaFuncion("seguno mensaje"));
                 }
 
 
@@ -342,27 +492,24 @@ function repintarTabla() {
 
             });
 
+            //colocamos el listener de la primera tabla para el boton eliminar y el de copiar
+           
+                     document.getElementById("ct"+arrayJSONtraido[0].distrito).addEventListener('click',()=>{
+                            
+                        copiarDistrito(arrayJSONtraido[0].distrito);   
+                        
+                    })
+
+                    document.getElementById("et"+arrayJSONtraido[0].distrito).addEventListener('click',()=>{
+                        eliminarDistrito(arrayJSONtraido[0].distrito);
+                    })
+
+
+
             distritoActual = '';
             numTablas = 0;
 
-
-            document.getElementById("newRow").innerHTML = `
-    <tr>
-    <td id="distritoSelect"><p class="textnewRowgris">1.Selecciona un distrito</p></td>
-    <td id="nivelSelect"><p class="textnewRowgris">2.Selecciona un nivel</p></td>
-    <td id="cargoSelect"><p class="textnewRowgris">3.Selecciona un cargo</p></td>
-    
-  
-    <td id="accionSelect">
-        <button class="buttonExtension" id="guardarSelect">Guardar</button>
-    </td>
-
-    <td id="accionSelect" style="padding:1rem">
-        <button type="button" class="close" id="LimpiarSeleccion" aria-label="Close">X</button>
-    </td>
-
-
-    </tr>`;
+            document.getElementById("newRow").innerHTML = agregarFiltro;
             ListenerGuardarSelectJSON();
             ListenerLimpiarSeleccion();
 
@@ -442,12 +589,14 @@ function ListenerGuardarSelectJSON() {
 
 }
 
+
 function ListenerLimpiarSeleccion(){
     document.getElementById("LimpiarSeleccion").addEventListener('click',()=>{
         
         distrito = '';
         nivel = '';
         cargo = '';
+        arrayJSONSelect={distrito:undefined,nivel:undefined,cargo:undefined};
         
         document.getElementById("distritoSelect").innerHTML='<p class="textnewRowgris">1.Selecciona un distrito</p>';
         document.getElementById("nivelSelect").innerHTML='<p class="textnewRowgris">2.Selecciona un nivel</p>';
@@ -473,7 +622,8 @@ const observerDistrito = new MutationObserver(function (mutations) {
         //guardamos el distrito elegido el el arrayJSONSelect
         arrayJSONSelect.distrito = distrito;
         //colocamos el distrito elegido en la tabla
-        document.getElementById("distritoSelect").innerHTML = `<p class="textnewRowblack">${arrayJSONSelect.distrito}</p>`;
+        // document.getElementById("distritoSelect").innerHTML = `<ul id="currentDistritoSelection" class="list-group filtroOutcome"><li class="list-group-item"><p style="color: black;">${arrayJSONSelect.distrito}</p><i class=" iconoCerrar far fa-times-circle"></i></li></ul>`;
+        document.getElementById("distritoSelect").innerHTML = `<div style="display:flex, flexdirection:row"><p class="textnewRowblack">${arrayJSONSelect.distrito}</p></div>`;
 
     } catch (error) {
 
@@ -503,7 +653,7 @@ const observerNivel = new MutationObserver(function (mutations) {
         //guardamos el nivel elegido el el arrayJSONSelect
         arrayJSONSelect.nivel = nivel;
         //colocamos el distrito elegido en la tabla
-        document.getElementById("nivelSelect").innerHTML = `<p class="textnewRowblack">${arrayJSONSelect.nivel}</p>`;
+        document.getElementById("nivelSelect").innerHTML = `<div style="display:flex, flexdirection:row"><p class="textnewRowblack">${arrayJSONSelect.nivel}</p></div>`;
 
     } catch (error) {
 
@@ -532,7 +682,7 @@ const observerCargo = new MutationObserver(function (mutations) {
         arrayJSONSelect.cargo = cargo;
         //colocamos el distrito elegido en la tabla
         
-        document.getElementById("cargoSelect").innerHTML = `<p class="textnewRowblack">${arrayJSONSelect.cargo}</p>`;
+        document.getElementById("cargoSelect").innerHTML = `<div style="display:flex, flexdirection:row"><p class="textnewRowblack">${arrayJSONSelect.cargo}</p></div>`;
     } catch (error) {
 
     }
@@ -560,7 +710,7 @@ async function consultar(dis = '', niv = '', car = '') {
     let cargo = car.replaceAll(' ', '%20').replaceAll('[','%5B').replaceAll('[','%5D').replaceAll('/','%2F');
 
     let urlFinal = consultaURL +'select?q=*%3A*&rows=6&sort=finoferta%20desc&json.nl=map&fq=descdistrito%3A%22'+ distrito + '%22&fq=descnivelmodalidad%3A%22' + nivel + '%22&fq=estado%3Apublicada&fq=cargo%3A%22' + cargo + '%22&wt=json';
-    console.log("URL:"+urlFinal)
+    // console.log("URL:"+urlFinal)
     let res = await fetch(urlFinal)
         .then(response => response.json())
         .then(data => {
@@ -670,13 +820,16 @@ async function mostrarResultado(id, pintaren, color, dis, niv, car) {
             document.getElementById("copiar" + id).addEventListener('click', function () {
                 alert("copiado!")
                 arrayJSONSelect.distrito = arrayJSONtraido[id].distrito;
-                document.getElementById("distritoSelect").innerText = arrayJSONSelect.distrito;
+                document.getElementById("distritoSelect").innerHTML = `<div style="display:flex, flexdirection:row"><p class="textnewRowblack">${arrayJSONSelect.distrito}</p></div>`;
+                ListenerLimpiarDistrito();
 
                 arrayJSONSelect.nivel = arrayJSONtraido[id].nivel;
-                document.getElementById("nivelSelect").innerText = arrayJSONSelect.nivel;
+                document.getElementById("nivelSelect").innerHTML = `<div style="display:flex, flexdirection:row"><p class="textnewRowblack">${arrayJSONSelect.nivel}</p></div>`;
+                ListenerLimpiarNivel();
 
                 arrayJSONSelect.cargo = arrayJSONtraido[id].cargo;
-                document.getElementById("cargoSelect").innerText = arrayJSONSelect.cargo;
+                document.getElementById("cargoSelect").innerHTML = `<div style="display:flex, flexdirection:row"><p class="textnewRowblack">${arrayJSONSelect.cargo}</p></div>`;
+                ListenerLimpiarCargo();
             })
         }, 2000)
     }
@@ -714,6 +867,32 @@ async function mostrarResultado(id, pintaren, color, dis, niv, car) {
 
         }, 2000);
     };
+
+    function ListenerLimpiarDistrito(){
+        document.getElementById("CloseDis").addEventListener('click',()=>{
+            distrito = '';  
+            arrayJSONSelect.distrito= undefined; 
+            document.getElementById("distritoSelect").innerHTML='<p class="textnewRowgris">1.Selecciona un distrito</p>';
+        })
+    }
+    
+    function ListenerLimpiarNivel(){
+        document.getElementById("CloseNiv").addEventListener('click',()=>{
+            nivel = '';
+            arrayJSONSelect.nivel= undefined; 
+            document.getElementById("nivelSelect").innerHTML='<p class="textnewRowgris">2.Selecciona un nivel</p>';
+            
+        })
+    }
+    
+    function ListenerLimpiarCargo(){
+        document.getElementById("CloseCar").addEventListener('click',()=>{
+            cargo = '';
+            arrayJSONSelect.cargo= undefined;
+            document.getElementById("cargoSelect").innerHTML='<p class="textnewRowgris">3.Selecciona un cargo</p>';
+        })
+    }
+    
 
 
 }
@@ -1146,3 +1325,8 @@ ListenernextJSON(dis, niv, car,actual,numFound,'nextJsondown');
 ListenerprevJSON(dis, niv, car,actual,'prevJsondown');
 }
 
+
+function copiarTabla(string){
+    alert(string);
+    console.log(string)
+}
