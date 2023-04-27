@@ -8,13 +8,9 @@
     "128": "icon128.png"
   },
   "permissions": [
-    "tabs",
-    "activeTab",
     "storage"
   ],
-  "background": {
-    "service_worker": "background.js"
-  },
+ 
   "content_scripts": [{
     "matches": ["https://misservicios.abc.gob.ar/actos.publicos.digitales/"],
     "js": ["script.js"],
@@ -23,10 +19,7 @@
   "action": {
     "default_popup": "popup.html"
   },
-  "web_accessible_resources": [
-    {
-      "matches": ["https://misservicios.abc.gob.ar/*"],
-      "resources": ["consultar.js"]
-    }
-  ]
+  "background": {
+    "service_worker": "background.js"
+  }
 }

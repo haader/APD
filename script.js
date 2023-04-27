@@ -20,6 +20,9 @@ let numpublic = 0;
 
 const mihtml = `
 <h3 class="tittle">APD: extensión (Adrian Benitez)</h3>
+<div class="center">
+<a href='https://cafecito.app/ayudarandomdev' rel='noopener' target='_blank'><img srcset='https://cdn.cafecito.app/imgs/buttons/button_5.png 1x, https://cdn.cafecito.app/imgs/buttons/button_5_2x.png 2x, https://cdn.cafecito.app/imgs/buttons/button_5_3.75x.png 3.75x' src='https://cdn.cafecito.app/imgs/buttons/button_5.png' alt='Invitame un café en cafecito.app' /></a>
+</div>
 
 <div class="center" id="menu">
 
@@ -88,6 +91,7 @@ const mihtml = `
             #distritoSelect,#nivelSelect,#cargoSelect,#estadoSelect,#accionSelect{
                 background:pink;
                 padding: 10px;
+                align-self: center;
                 
             }
             .textnewRowgris{
