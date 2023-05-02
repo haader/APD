@@ -301,7 +301,7 @@ function repintarTabla() {
         //imprimimos los datos en el HTML
 
         //si los datos del LOCALSTORAGE estan vacios solo cargamos 1 row
-        if (arrayJSONtraido === undefined) {
+        if (arrayJSONtraido === undefined || arrayJSONtraido.length==0) {
 
             {/* <td id="distritoSelect" color="#fd8585">selecciona un distrito</td> */ }
             //agregamos para agregar un nuevo filtro
@@ -555,9 +555,9 @@ function ListenerGuardarSelectJSON() {
 
                         repintarTabla();
 
-                        console.log("traidos:" + arrayJSONtraido);
-                        console.log("seleccionado:" + JSON.stringify(arrayJSONSelect));
-                        console.log("enviar:" + JSON.stringify(arrayJSONenviar));
+                        // console.log("traidos:" + arrayJSONtraido);
+                        // console.log("seleccionado:" + JSON.stringify(arrayJSONSelect));
+                        // console.log("enviar:" + JSON.stringify(arrayJSONenviar));
 
                     } else {
                         arrayJSONenviar = arrayJSONtraido.concat({ "distrito": arrayJSONSelect.distrito, "nivel": arrayJSONSelect.nivel, "cargo": arrayJSONSelect.cargo });
@@ -570,9 +570,9 @@ function ListenerGuardarSelectJSON() {
                         repintarTabla();
 
 
-                        console.log("traidos:" + arrayJSONtraido);
-                        console.log("seleccionado:" + JSON.stringify(arrayJSONSelect));
-                        console.log("enviar:" + JSON.stringify(arrayJSONenviar));
+                        // console.log("traidos:" + arrayJSONtraido);
+                        // console.log("seleccionado:" + JSON.stringify(arrayJSONSelect));
+                        // console.log("enviar:" + JSON.stringify(arrayJSONenviar));
                     }
 
                 }
@@ -581,9 +581,9 @@ function ListenerGuardarSelectJSON() {
             } catch (error) {
                 console.log(error)
                 alert("ATENCION!!: Los datos NO fueron guardados correctamente");
-                console.log("traidos:" + arrayJSONtraido);
-                console.log("seleccionado:" + JSON.stringify(arrayJSONSelect));
-                console.log("enviar:" + JSON.stringify(arrayJSONenviar));
+                // console.log("traidos:" + arrayJSONtraido);
+                // console.log("seleccionado:" + JSON.stringify(arrayJSONSelect));
+                // console.log("enviar:" + JSON.stringify(arrayJSONenviar));
             }
 
         })
