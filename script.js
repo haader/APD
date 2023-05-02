@@ -825,15 +825,15 @@ async function mostrarResultado(id, pintaren, color, dis, niv, car) {
                 alert("copiado!")
                 arrayJSONSelect.distrito = arrayJSONtraido[id].distrito;
                 document.getElementById("distritoSelect").innerHTML = `<div style="display:flex, flexdirection:row"><p class="textnewRowblack">${arrayJSONSelect.distrito}</p></div>`;
-                ListenerLimpiarDistrito();
+                
 
                 arrayJSONSelect.nivel = arrayJSONtraido[id].nivel;
                 document.getElementById("nivelSelect").innerHTML = `<div style="display:flex, flexdirection:row"><p class="textnewRowblack">${arrayJSONSelect.nivel}</p></div>`;
-                ListenerLimpiarNivel();
+                
 
                 arrayJSONSelect.cargo = arrayJSONtraido[id].cargo;
                 document.getElementById("cargoSelect").innerHTML = `<div style="display:flex, flexdirection:row"><p class="textnewRowblack">${arrayJSONSelect.cargo}</p></div>`;
-                ListenerLimpiarCargo();
+                
             })
         }, 2000)
     }
@@ -872,31 +872,8 @@ async function mostrarResultado(id, pintaren, color, dis, niv, car) {
         }, 2000);
     };
 
-    function ListenerLimpiarDistrito(){
-        document.getElementById("CloseDis").addEventListener('click',()=>{
-            distrito = '';  
-            arrayJSONSelect.distrito= undefined; 
-            document.getElementById("distritoSelect").innerHTML='<p class="textnewRowgris">1.Selecciona un distrito</p>';
-        })
-    }
     
-    function ListenerLimpiarNivel(){
-        document.getElementById("CloseNiv").addEventListener('click',()=>{
-            nivel = '';
-            arrayJSONSelect.nivel= undefined; 
-            document.getElementById("nivelSelect").innerHTML='<p class="textnewRowgris">2.Selecciona un nivel</p>';
-            
-        })
-    }
-    
-    function ListenerLimpiarCargo(){
-        document.getElementById("CloseCar").addEventListener('click',()=>{
-            cargo = '';
-            arrayJSONSelect.cargo= undefined;
-            document.getElementById("cargoSelect").innerHTML='<p class="textnewRowgris">3.Selecciona un cargo</p>';
-        })
-    }
-    
+   
 
 
 }
