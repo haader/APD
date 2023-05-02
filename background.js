@@ -1,11 +1,27 @@
 
+let booleanApp=true;
+
+
+chrome.tabs.query({url: "https://misservicios.abc.gob.ar/actos.publicos.digitales/"}, function(tabs) {
+      if (tabs.length > 0) {
+        chrome.tabs.reload(tabs[0].id);
+        
+      }
+    });
 
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   if (request.type === "toggleExtension") {
-    console.log("Received toggleExtension message from popup.js");
-    chrome.tabs.reload();
-    chrome.management.setEnabled(chrome.runtime.id, false);
+  
+
+    chrome.tabs.query({url: "https://misservicios.abc.gob.ar/actos.publicos.digitales/"}, function(tabs) {
+      if (tabs.length > 0) {
+        chrome.tabs.reload(tabs[0].id);
+        booleanApp=!booleanApp;
+    chrome.management.setEnabled("fonjahncogcbmenahmchjeenphgggole", booleanApp);
+    
+      }
+    });
+
   }
 });
-
